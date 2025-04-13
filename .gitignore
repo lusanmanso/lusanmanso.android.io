@@ -1,0 +1,126 @@
+# Gradle files
+.gradle/
+build/
+
+<<<<<<< HEAD
+# Local configuration files (sdk path, etc)
+=======
+# Local configuration file (sdk path, etc)
+>>>>>>> 767eadf03d566ace00d7f2b0cba8174c2eef6f62
+local.properties
+
+# Log/OS Files
+*.log
+<<<<<<< HEAD
+*.DS_Store
+*.DS_Store?
+hs_err_pid*
+
+# Android Studio generated files and folders
+.idea/
+*.iml
+*.ipr
+*.iws
+.cxx/
+.externalNativeBuild/
+captures/
+*.apk
+*.hprof
+*.jks
+*.keystore
+/build
+/out/
+*.class
+=======
+
+# Android Studio generated files and folders
+captures/
+.externalNativeBuild/
+.cxx/
+*.apk
+output.json
+
+# IntelliJ
+*.iml
+.idea/
+misc.xml
+deploymentTargetDropDown.xml
+render.experimental.xml
+>>>>>>> 767eadf03d566ace00d7f2b0cba8174c2eef6f62
+
+# Keystore files
+*.jks
+*.keystore
+
+<<<<<<< HEAD
+# NDK
+/obj/
+/jniLibs/
+
+# Android Gradle Plugin 3.0+
+.gradle
+/local.properties
+/.idea/caches/
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/libraries/
+.externalNativeBuild
+.externalNativeBuild/*
+local.properties
+gradle/wrapper/gradle-wrapper.properties
+
+# Proguard generated files
+/proguard/
+
+# Instant Run files
+/build/intermediates/instant-run/
+
+# Firebase configuration files
+google-services.json
+
+# Navigation editor
+.navigation/
+
+# Android Studio Patch files
+*.patch
+
+# Code Coverage files
+/coverage/
+
+# Android Profiling data
+*.rawproto
+
+# Outputs
+/bin/
+/gen/
+/out/
+
+# Other generated files
+*.class
+*.dex
+*.so
+*.ap_
+
+# Editor-specific files
+.idea/
+*.iws
+*.iml
+*.ipr
+.DS_Store
+.DS_Store?
+.classpath
+.project
+.settings/
+/bin/
+/gen/
+/out/
+/obj/
+/local.properties
+/proguard/
+=======
+# Google Services (e.g. APIs or Firebase)
+google-services.json
+
+# Android Profiling
+*.hprof
+>>>>>>> 767eadf03d566ace00d7f2b0cba8174c2eef6f62

@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Checkpoint</string>
+    <string name="action_settings">Settings</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="login_fragment_label">Login Fragment</string>">
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <!-- Login fragment strings -->
+    <string name="password_hint">Password must be secure</string>
+    <string name="username_hint">Introduce your username</string>
+    <string name="login_button_text">Login</string>
+
+</resources>

@@ -1,4 +1,4 @@
-package com.example.checkpoint.ui.login
+package com.example.checkpoint.ui.auth
 
 import android.os.Bundle
 import android.util.Log // Logging
@@ -7,8 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast // Toast Messages
-import androidx.navigation.fragment.findNavController
-import com.example.checkpoint.R
 import com.example.checkpoint.databinding.FragmentLoginBinding
 import com.google.firebase.auth.FirebaseAuth // Firebase Auth
 import com.google.firebase.auth.ktx.auth // KTX
@@ -45,8 +43,8 @@ class LoginFragment : Fragment() {
 
         // Login Button
         binding.buttonLogin.setOnClickListener {
-            val email = binding.editTextUsername.text.toString().trim()
-            var password = binding.editTextPassword.text.toString().trim()
+            val email = binding.editTextEmail.text.toString().trim()
+            val password = binding.editTextPassword.text.toString().trim()
 
             if (email.isEmpty() || password.isEmpty()) {
                 Toast.makeText(context, "Please enter email and password.", Toast.LENGTH_SHORT).show()

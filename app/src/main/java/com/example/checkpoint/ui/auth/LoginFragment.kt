@@ -7,6 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast // Toast Messages
+import androidx.navigation.fragment.findNavController
+import com.example.checkpoint.R
 import com.example.checkpoint.databinding.FragmentLoginBinding
 import com.example.checkpoint.databinding.FragmentRegisterBinding
 import com.google.firebase.auth.FirebaseAuth // Firebase Auth
@@ -59,6 +61,7 @@ class LoginFragment : Fragment() {
                     val user = auth.currentUser
                     Toast.makeText(context, "Authentication: Success", Toast.LENGTH_SHORT).show()
                     // TODO: Navigate to the next fragment of games
+                    findNavController().navigate(R.id.action_LoginFragment_to_SecondFragment, null, androidx.navigation.NavOptions.Builder().setPopUp(R.id.loginFragment, true).build())
                 } else { // Fail: Display message
                     Log.w("LoginFragment", "signInWithEmail: Failure", task.exception)
                     Toast.makeText(context, "Authentication: Failure - ${task.exception?.message}", Toast.LENGTH_SHORT).show()
@@ -66,14 +69,20 @@ class LoginFragment : Fragment() {
                 }
             }
         }
+
+        binding.textViewRegisterLink.setOnClickListener {
+            findNavController().navigate(R.id.action_LoginFragment_to_RegisterFragment)
+        }
     }
 
+    // Extra comprobation ChatGpt recommended to check if user is already logged in
     override fun onStart() {
         super.onStart()
         val currentUser = auth.currentUser
         if (currentUser != null) {
             Log.d("LoginFragment", "User already logged in: ${currentUser.uid}")
             // TODO: Navigate to the next fragment of games
+
         }
     }
 
@@ -81,4 +90,8 @@ class LoginFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+}
+
+private fun NavOptions.Builder.setPopUp(loginFragment: Any): Any {
+
 }

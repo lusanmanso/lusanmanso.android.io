@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast // Toast Messages
 import com.example.checkpoint.databinding.FragmentLoginBinding
+import com.example.checkpoint.databinding.FragmentRegisterBinding
 import com.google.firebase.auth.FirebaseAuth // Firebase Auth
 import com.google.firebase.auth.ktx.auth // KTX
 import com.google.firebase.ktx.Firebase // Firebase KTX
@@ -65,9 +66,6 @@ class LoginFragment : Fragment() {
                 }
             }
         }
-
-        // Register Button
-
     }
 
     override fun onStart() {

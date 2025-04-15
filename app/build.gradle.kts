@@ -54,9 +54,12 @@ dependencies {
     // ViewModel & LiveData
     implementation(libs.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.livedata.ktx)
+
+
     //noinspection BomWithoutPlatform
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
+    // implementation(libs.firebase.auth.ktx)
 
     // Testing
     testImplementation(libs.junit)

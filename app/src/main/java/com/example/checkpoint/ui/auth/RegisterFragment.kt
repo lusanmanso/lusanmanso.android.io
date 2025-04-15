@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.example.checkpoint.R
 import com.example.checkpoint.databinding.FragmentRegisterBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -67,7 +68,7 @@ class RegisterFragment: Fragment() {
                     val user = auth.currentUser
                     Toast.makeText(context, "Authentication: Success", Toast.LENGTH_SHORT).show()
                     // Navigate to Login (TODO: ¿O mejor lo llevo ya a la aplicación?)
-                    // findNavController().navigate(R.id.action_RegisterFragment_to_LoginFragment)
+                    findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
                 } else {
                     Log.w("RegisterFragment", "createUserWithEmail: Failure", task.exception)
                     Toast.makeText(context, "Authentication: Failure - ${task.exception?.message}", Toast.LENGTH_LONG).show()
@@ -77,8 +78,7 @@ class RegisterFragment: Fragment() {
 
         // Listener for go back to login link
         binding.textViewLoginLink.setOnClickListener {
-            findNavController().navigateUp()
-            // TODO: Define action findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
+            findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
         }
     }
 

@@ -60,8 +60,8 @@ class LoginFragment : Fragment() {
                     Log.d("LoginFragment", "signInWithEmail: Success")
                     val user = auth.currentUser
                     Toast.makeText(context, "Authentication: Success", Toast.LENGTH_SHORT).show()
-                    // TODO: Navigate to the next fragment of games
-                    findNavController().navigate(R.id.action_LoginFragment_to_SecondFragment, null, androidx.navigation.NavOptions.Builder().setPopUp(R.id.loginFragment, true).build())
+                    // TODO: Navigate to the next fragment of games (I need to implement second)
+                    findNavController().navigate(R.id.action_loginFragment_to_secondFragment, null, androidx.navigation.NavOptions.Builder().setPopUpTo(R.id.loginFragment, true).build())
                 } else { // Fail: Display message
                     Log.w("LoginFragment", "signInWithEmail: Failure", task.exception)
                     Toast.makeText(context, "Authentication: Failure - ${task.exception?.message}", Toast.LENGTH_SHORT).show()
@@ -71,7 +71,7 @@ class LoginFragment : Fragment() {
         }
 
         binding.textViewRegisterLink.setOnClickListener {
-            findNavController().navigate(R.id.action_LoginFragment_to_RegisterFragment)
+            findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
         }
     }
 
@@ -81,8 +81,7 @@ class LoginFragment : Fragment() {
         val currentUser = auth.currentUser
         if (currentUser != null) {
             Log.d("LoginFragment", "User already logged in: ${currentUser.uid}")
-            // TODO: Navigate to the next fragment of games
-
+            findNavController().navigate(R.id.action_loginFragment_to_secondFragment)
         }
     }
 
@@ -90,8 +89,4 @@ class LoginFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-}
-
-private fun NavOptions.Builder.setPopUp(loginFragment: Any): Any {
-
 }

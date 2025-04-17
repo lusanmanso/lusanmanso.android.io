@@ -2,6 +2,7 @@
 agp = "8.9.1"
 compiler = "4.16.0"
 converterGson = "latest.version"
+gson = "2.10.1"
 firebaseBom = "33.12.0"
 glide = "4.16.0"
 kotlin = "2.0.21"
@@ -43,6 +44,7 @@ androidx-navigation-fragment-ktx = { group = "androidx.navigation", name = "navi
 androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigationUiKtx" }
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+gson = { module = "com.google.code.gson:gson", name = "gson", version.ref = "gson"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

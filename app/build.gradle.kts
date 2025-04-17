@@ -1,3 +1,16 @@
+// Import this from Java cause then getLocalProperty does not work (*Gemini did it)
+import java.util.Properties
+
+fun getLocalProperty(key: String): String {
+    val properties = Properties()
+    val localPropertiesFile = project.rootProject.file("local.properties")
+    if (localPropertiesFile.exists()) {
+        localPropertiesFile.inputStream().use { properties.load(it) }
+    }
+
+    return properties.getProperty(key) ?: ""
+}
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -16,7 +29,9 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
+
+        // Read API Key from local.properties and expose it in BuildConfig
+        buildConfigField("String", "RAWG_API_KEY", "\"${getLocalProperty("RAWG_API_KEY")}\"")    }
 
     buildTypes {
         release {
@@ -51,10 +66,6 @@ dependencies {
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
 
-    // ViewModel & LiveData
-    implementation(libs.lifecycle.viewmodel.ktx)
-    implementation(libs.androidx.lifecycle.livedata.ktx)
-
     // Firebase
     //noinspection BomWithoutPlatform
     implementation(platform(libs.firebase.bom))
@@ -64,6 +75,7 @@ dependencies {
     // RAWG Api & Retrofit
     implementation(libs.retrofit) // Networking
     implementation(libs.converter.gson) // JSON <-> Kotlin
+    implementation(libs.gson) // Core GSON library
 
     // Kotlin Coroutines
     implementation(libs.kotlinx.coroutines.core)

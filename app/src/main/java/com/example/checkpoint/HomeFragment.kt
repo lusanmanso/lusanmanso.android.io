@@ -13,7 +13,7 @@ import com.example.checkpoint.databinding.FragmentSecondBinding
  */
 class HomeFragment : Fragment() {
 
-    private var _binding: FragmentSecondBinding? = null
+    private var _binding: FragmentHomeBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -24,7 +24,7 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        _binding = FragmentSecondBinding.inflate(inflater, container, false)
+        // _binding = HomBinding.inflate(inflater, container, false)
         return binding.root
 
     }
@@ -33,7 +33,7 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.buttonSecond.setOnClickListener {
-            findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
+            // findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
         }
     }
 

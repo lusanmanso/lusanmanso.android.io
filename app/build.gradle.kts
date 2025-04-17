@@ -55,12 +55,29 @@ dependencies {
     implementation(libs.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.livedata.ktx)
 
-
+    // Firebase
     //noinspection BomWithoutPlatform
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
-    // implementation(libs.firebase.auth.ktx)
+    // implementation(libs.firebase.auth.ktx) The same for Kotlin (I think is already in .auth)
 
+    // RAWG Api & Retrofit
+    implementation(libs.retrofit) // Networking
+    implementation(libs.converter.gson) // JSON <-> Kotlin
+
+    // Kotlin Coroutines
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.android)
+
+    // Architecture Componentes
+    implementation(libs.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.androidx.recyclerview)
+
+    // Glide for the images
+    implementation(libs.glide)
+    annotationProcessor(libs.compiler)
+    
     // Testing
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

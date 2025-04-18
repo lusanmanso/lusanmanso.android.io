@@ -24,4 +24,7 @@
     <string name="password_confirmation_hint">Confirm password</string>
     <string name="login_link">Already have an account? Login</string>
 
+    <!-- Home fragment strings -->
+    <string name="errorTextLoadingGames">Error loading games</string>
+
 </resources>

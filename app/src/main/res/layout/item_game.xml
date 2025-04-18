@@ -17,6 +17,7 @@
         <!-- Game img in View -->
         <ImageView
             android:id="@+id/imageViewGameBackground"
+            android:contentDescription="@string/gameCoverDescription"
             android:layout_width="0dp"
             android:layout_height="180dp"
             android:scaleType="centerCrop"

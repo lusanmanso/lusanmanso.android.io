@@ -27,4 +27,7 @@
     <!-- Home fragment strings -->
     <string name="errorTextLoadingGames">Error loading games</string>
 
+    <!-- Game descriptions -->
+    <string name="gameCoverDescription">Game Cover</string>"
+
 </resources>

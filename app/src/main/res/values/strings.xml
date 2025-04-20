@@ -7,6 +7,7 @@
     <string name="login_fragment_label">Login Fragment</string>">
     <string name="register_fragment_label">Register Fragment</string>
     <string name="home_fragment_label">Home Fragment</string>
+    <string name="detail_fragment_label">Game Detail</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
@@ -29,5 +30,7 @@
 
     <!-- Game descriptions -->
     <string name="gameCoverDescription">Game Cover</string>"
+
+    <!-- Game detail fragment strings -->
 
 </resources>

@@ -31,3 +31,47 @@ data class GameDetail(
 //    val tags: List<Tag>?,
 //    val publishers: List<Publisher>?,
 )
+
+data class Rating(
+    val id: Int,
+    val title: String?,
+    val count: Int?,
+    val percent: Double?
+)
+
+data class PlatformInfo(
+    val platform: PlatformDetail?,
+    @SerializedName("released_at") val releasedAt: String?,
+    val requirements: Requirements?
+)
+
+data class PlatformDetail(
+    val id: Int,
+    val slug: String?,
+    val name: String?
+    // ... otros campos de Platform si los da la API de detalle ...
+)
+
+data class Requirements(
+    val minimum: String?,
+    val recommended: String?
+)
+
+data class StoreInfo(
+    val store: StoreDetail?
+    // ... otros campos ...
+)
+
+data class StoreDetail(
+    val id: Int,
+    val slug: String?,
+    val name: String?
+    // ...
+)
+
+data class Developer(
+    val id: Int,
+    val name: String?,
+    val slug: String?
+    // ...
+)

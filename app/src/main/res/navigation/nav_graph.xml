@@ -45,6 +45,26 @@
     </fragment>
 
     <!-- Actions on Home -->
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.checkpoint.ui.home.HomeFragment"
+        android:label="@string/home_fragment_label"
+        tools:layout="@layout/fragment_home">
 
+        <action
+            android:id="@id/action_homeFragment_to_gameDetailFragment"
+            app:destination="@+id/gameDetailFragment" />
+    </fragment>
+
+    <!-- Actions on Game Detail -->
+    <fragment
+        android:id="@id/gameDetailFragment"
+        android:name="com.example.checkpoint.ui.detail.GameDetailFragment"
+        android:label="detail_fragment_label"
+        tools:layout="@layout/fragment_game_detail" >
+        <argument
+            android:name="gameId"
+            app:argType="integer" />
+    </fragment>
 
 </navigation>

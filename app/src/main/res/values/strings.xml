@@ -30,6 +30,9 @@
 
     <!-- Game descriptions -->
     <string name="gameCoverDescription">Game Cover</string>"
+    <string name="game_image_description">Game background image</string>
+    <string name="description_label">Description</string>
+    <string name="platforms_label">Platforms</string>
 
     <!-- Game detail fragment strings -->
 

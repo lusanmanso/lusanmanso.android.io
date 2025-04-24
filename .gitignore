@@ -8,6 +8,7 @@ build/
 # Local configuration file (sdk path, etc)
 >>>>>>> 767eadf03d566ace00d7f2b0cba8174c2eef6f62
 local.properties
+secrets.properties
 
 # Log/OS Files
 *.log

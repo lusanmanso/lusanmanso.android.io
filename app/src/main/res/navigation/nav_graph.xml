@@ -15,11 +15,7 @@
         <!-- Login to Register Action -->
         <action
             android:id="@+id/action_loginFragment_to_registerFragment"
-            app:destination="@id/registerFragment"
-            app:enterAnim="anim/slide_in_right"
-            app:exitAnim="anim/slide_out_left"
-            app:popEnterAnim="anim/slide_in_left"
-            app:popExitAnim="anim/slide_out_right" />
+            app:destination="@id/registerFragment" />
 
         <!-- Login to Main -->
         <action
@@ -39,12 +35,12 @@
         <action
             android:id="@+id/action_registerFragment_to_loginFragment"
             app:destination="@id/loginFragment"
-            app:popUpTo="loginFragment"
+            app:popUpTo="@id/loginFragment"
             app:popUpToInclusive="false" />
 
     </fragment>
 
-    <!-- Actions on Home -->
+    <!-- Actions on Home
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.example.checkpoint.ui.home.HomeFragment"
@@ -54,9 +50,9 @@
         <action
             android:id="@id/action_homeFragment_to_gameDetailFragment"
             app:destination="@+id/gameDetailFragment" />
-    </fragment>
+    </fragment> -->
 
-    <!-- Actions on Game Detail -->
+    <!-- Actions on Game Detail
     <fragment
         android:id="@id/gameDetailFragment"
         android:name="com.example.checkpoint.ui.detail.GameDetailFragment"
@@ -65,6 +61,6 @@
         <argument
             android:name="gameId"
             app:argType="integer" />
-    </fragment>
+    </fragment> -->
 
 </navigation>

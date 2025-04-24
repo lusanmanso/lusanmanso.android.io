@@ -8,7 +8,7 @@ fun getLocalProperty(key: String): String {
         localPropertiesFile.inputStream().use { properties.load(it) }
     }
 
-    return properties.getProperty(key) ?: ""
+    return properties.getProperty(key, "")
 }
 
 plugins {
@@ -29,9 +29,11 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
+        // -- LA API TIENE QUE ESTAR AQUÍ --
+        val secrets = rootProject.extra["secrets"] as Properties // Cast to Properties
         // Read API Key from local.properties and expose it in BuildConfig
-        buildConfigField("String", "RAWG_API_KEY", "\"${getLocalProperty("RAWG_API_KEY")}\"")    }
+        buildConfigField("String", "RAWG_API_KEY", "\"${secrets.getProperty("RAWG_API_KEY")}\"")
+    }
 
     buildTypes {
         release {
@@ -46,9 +48,11 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
     kotlinOptions {
         jvmTarget = "11"
     }
+
     buildFeatures {
         viewBinding = true
         buildConfig = true
@@ -73,10 +77,14 @@ dependencies {
     implementation(libs.firebase.auth)
     // implementation(libs.firebase.auth.ktx) The same for Kotlin (I think is already in .auth)
 
-    // RAWG Api & Retrofit
+    //  Retrofit for API requests
     implementation(libs.retrofit) // Networking
     implementation(libs.converter.gson) // JSON <-> Kotlin
     implementation(libs.gson) // Core GSON library
+
+    // OkHttp for handling HTTP requests
+    implementation(libs.okhttp)
+    implementation(libs.logging.interceptor)
 
     // Kotlin Coroutines
     implementation(libs.kotlinx.coroutines.core)

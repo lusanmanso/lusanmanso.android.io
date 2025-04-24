@@ -13,7 +13,7 @@ interface ApiRAWG {
         @Query("key") apiKey: String,
         @Query("page") page: Int,
         @Query("page_size") pageSize: Int,
-        // @Query("search") search: String? = null,
+        @Query("search") search: String? = null,
         // TODO: Add more queries for filtering
     ): Response<GameResponse>
 

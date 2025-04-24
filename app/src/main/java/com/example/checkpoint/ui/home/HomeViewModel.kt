@@ -33,7 +33,7 @@ class HomeViewModel: ViewModel() {
             try {
                 // Llamada a la API usando el cliente Retrofit y la interfaz del servicio
                 val response = RetrofitClient.instance.getGames(
-                    apiKey = BuildConfig.RAWG_API_KEY, // ¡Usa la clave desde BuildConfig!
+                    apiKey = BuildConfig.RAWG_API_KEY,
                     page = page,
                     pageSize = pageSize,
                     search = search

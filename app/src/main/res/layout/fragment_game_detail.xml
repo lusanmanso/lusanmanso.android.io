@@ -40,16 +40,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:srcCompat="@tools:sample/backgrounds/scenic"
-            android:contentDescription="@string/game_image_description" /> <TextView
-        android:id="@+id/textViewGameTitleDetail"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:textAppearance="@style/TextAppearance.Material3.HeadlineSmall"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imageViewGameDetail"
-        tools:text="Nombre del Juego Muy Largo" />
+            android:contentDescription="@string/game_image_description" />
+
+        <TextView
+            android:id="@+id/textViewGameTitleDetail"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:textAppearance="@style/TextAppearance.Material3.HeadlineSmall"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imageViewGameDetail"
+            tools:text="Nombre del Juego Muy Largo" />
 
         <TextView
             android:id="@+id/textViewRating"

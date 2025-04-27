@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity() {
         binding.fab.isVisible = destination.id == R.id.homeFragment
 
         // Show/hide the toolbar based on the fragment
-        val hideToolbarDestinations = setOf(R.id.loginFragment, R.id.registerFragment)
+        val hideToolbarDestinations = setOf(R.id.splashFragment, R.id.loginFragment, R.id.registerFragment)
         binding.appBarLayout.isVisible = destination.id !in hideToolbarDestinations
 
         // Update title in the top bar according to the screen

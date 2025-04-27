@@ -30,7 +30,6 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        // -- LA API TIENE QUE ESTAR AQUÍ --
         val secrets = rootProject.extra["secrets"] as Properties // Cast to Properties
         // Read API Key from local.properties and expose it in BuildConfig
         buildConfigField("String", "RAWG_API_KEY", "\"${secrets.getProperty("RAWG_API_KEY")}\"")
@@ -77,6 +76,7 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
     // implementation(libs.firebase.auth.ktx) The same for Kotlin (I think is already in .auth)
+    implementation(libs.firebase.firestore.ktx)
 
     //  Retrofit for API requests
     implementation(libs.retrofit) // Networking
@@ -96,6 +96,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.recyclerview)
     implementation(libs.logging.interceptor)
+    implementation(libs.androidx.swiperefreshlayout) // Or use the latest version
 
     // Glide for the images
     implementation(libs.glide)

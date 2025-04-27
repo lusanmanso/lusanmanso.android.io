@@ -7,7 +7,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-// Everything is en https://api.rawg.io/docs/
+// Everything is at https://api.rawg.io/docs/
 object RetrofitClient {
     private const val BASE_URL = "https://api.rawg.io/api/"
 

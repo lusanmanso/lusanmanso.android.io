@@ -2,5 +2,22 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Main app theme -->
+    <color name="primary">#FF5e2bff</color>
+    <color name="primary_variant">#FF4517DB</color>
+    <color name="secondary">#FF03DAC5</color>
+    <color name="secondary_variant">#FF018786</color>
+
+    <!-- Complementary colors -->
+    <color name="background">#FF121212</color>
+    <color name="surface">#FF1F1F1F</color>
+    <color name="error">#FFCF6679</color>
+
+    <!-- App-specific colors -->
     <color name="login_background_color">#FF5e2bff</color>
+    <color name="card_background">#FF2A2A2A</color>
+    <color name="text_primary">#FFEEEEEE</color>
+    <color name="text_secondary">#FFB0B0B0</color>
+    <color name="rating_star">#FFFFEB3B</color>
 </resources>

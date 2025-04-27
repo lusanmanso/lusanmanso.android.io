@@ -5,12 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    tools:context="ui.detail.GameDetailFragment">
+    tools:context=".ui.detail.GameDetailFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="16dp">
+        android:layout_height="wrap_content">
 
         <ProgressBar
             android:id="@+id/progressBarDetail"
@@ -28,13 +27,14 @@
             android:id="@+id/contentGroup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:constraint_referenced_ids="imageViewGameDetail, textViewGameTitleDetail, textViewRating, textViewReleaseDate, textViewDescriptionLabel, textViewGameDescription, textViewPlatformsLabel, textViewPlatforms"
+            app:constraint_referenced_ids="imageViewGameDetail, textViewGameTitleDetail, textViewRating, textViewReleaseDate, textViewDescriptionLabel, textViewGameDescription, textViewPlatformsLabel, textViewPlatforms, chipGroupGenres, fabAddToCollection, websiteButton, imageViewBackdrop, fabFavorite"
             android:visibility="visible"/>
 
+        <!-- Hero Image Banner -->
         <ImageView
             android:id="@+id/imageViewGameDetail"
             android:layout_width="0dp"
-            android:layout_height="200dp"
+            android:layout_height="250dp"
             android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -42,80 +42,228 @@
             tools:srcCompat="@tools:sample/backgrounds/scenic"
             android:contentDescription="@string/game_image_description" />
 
+        <!-- Gradient overlay for better text visibility -->
+        <View
+            android:id="@+id/overlayGradient"
+            android:layout_width="0dp"
+            android:layout_height="120dp"
+            android:background="@drawable/gradient_overlay"
+            app:layout_constraintBottom_toBottomOf="@+id/imageViewGameDetail"
+            app:layout_constraintEnd_toEndOf="@+id/imageViewGameDetail"
+            app:layout_constraintStart_toStartOf="@+id/imageViewGameDetail" />
+
+        <!-- Game Title positioned at the bottom of the image with gradient backdrop -->
         <TextView
             android:id="@+id/textViewGameTitleDetail"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:textAppearance="@style/TextAppearance.Material3.HeadlineSmall"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/imageViewGameDetail"
-            tools:text="Nombre del Juego Muy Largo" />
-
-        <TextView
-            android:id="@+id/textViewRating"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
-            app:drawableStartCompat="@android:drawable/star_on"
-            android:drawablePadding="4dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textViewGameTitleDetail"
-            tools:text="4.5 / 5" />
-
-        <TextView
-            android:id="@+id/textViewReleaseDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
-            app:layout_constraintBottom_toBottomOf="@+id/textViewRating"
-            app:layout_constraintStart_toEndOf="@+id/textViewRating"
-            app:layout_constraintTop_toTopOf="@+id/textViewRating"
-            tools:text="2023-10-20" />
-
-        <TextView
-            android:id="@+id/textViewDescriptionLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/description_label"  android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textViewRating" />
-
-        <TextView
-            android:id="@+id/textViewGameDescription"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:shadowColor="@color/black"
+            android:shadowDx="1"
+            android:shadowDy="1"
+            android:shadowRadius="2"
+            app:layout_constraintBottom_toBottomOf="@+id/imageViewGameDetail"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textViewDescriptionLabel"
-            tools:text="Esta es una descripción muy detallada del juego que puede ocupar varias líneas y explicar toda la trama y mecánicas..." />
+            tools:text="The Witcher 3: Wild Hunt" />
 
-        <TextView
-            android:id="@+id/textViewPlatformsLabel"
+        <!-- Favorite FAB -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabFavorite"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/platforms_label" android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textViewGameDescription" />
+            android:layout_margin="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@android:color/white"
+            app:backgroundTint="@color/primary"
+            app:srcCompat="@drawable/ic_favorite_border" />
 
-        <TextView
-            android:id="@+id/textViewPlatforms"
+        <!-- Main content with card background -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardViewContent"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+            android:layout_margin="16dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textViewPlatformsLabel"
-            tools:text="PC, PlayStation 5, Xbox Series S/X" />
+            app:layout_constraintTop_toBottomOf="@id/imageViewGameDetail">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp">
+
+                <!-- Rating with Star Icon -->
+                <TextView
+                    android:id="@+id/textViewRating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="4dp"
+                    android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                    android:textStyle="bold"
+                    app:drawableStartCompat="@android:drawable/btn_star_big_on"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="4.5 / 5" />
+
+                <!-- Release Date -->
+                <TextView
+                    android:id="@+id/textViewReleaseDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+                    app:layout_constraintBottom_toBottomOf="@+id/textViewRating"
+                    app:layout_constraintStart_toEndOf="@+id/textViewRating"
+                    app:layout_constraintTop_toTopOf="@+id/textViewRating"
+                    tools:text="2023-10-20" />
+
+                <!-- Metacritic Score Badge -->
+                <TextView
+                    android:id="@+id/textViewMetacritic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/metacritic_background"
+                    android:paddingStart="8dp"
+                    android:paddingTop="4dp"
+                    android:paddingEnd="8dp"
+                    android:paddingBottom="4dp"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="93"
+                    tools:visibility="visible" />
+
+                <!-- Genres Chip Group -->
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chipGroupGenres"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewRating">
+
+                    <!-- Genres will be added dynamically -->
+                    <com.google.android.material.chip.Chip
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/rpg_filter"
+                        style="@style/Widget.MaterialComponents.Chip.Action"
+                        android:visibility="gone"
+                        tools:visibility="visible" />
+
+                    <com.google.android.material.chip.Chip
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/adventure_filter"
+                        style="@style/Widget.MaterialComponents.Chip.Action"
+                        android:visibility="gone"
+                        tools:visibility="visible" />
+
+                </com.google.android.material.chip.ChipGroup>
+
+                <!-- Description Section -->
+                <TextView
+                    android:id="@+id/textViewDescriptionLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/description_label"
+                    android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/chipGroupGenres" />
+
+                <TextView
+                    android:id="@+id/textViewGameDescription"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/textViewDescriptionLabel"
+                    tools:text="Esta es una descripción muy detallada del juego que puede ocupar varias líneas y explicar toda la trama y mecánicas..." />
+
+                <!-- Additional image -->
+                <ImageView
+                    android:id="@+id/imageViewBackdrop"
+                    android:layout_width="0dp"
+                    android:layout_height="180dp"
+                    android:layout_marginTop="16dp"
+                    android:contentDescription="@string/game_backdrop_description"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/textViewGameDescription"
+                    tools:src="@tools:sample/backgrounds/scenic" />
+
+                <!-- Platforms Section -->
+                <TextView
+                    android:id="@+id/textViewPlatformsLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/platforms_label"
+                    android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/imageViewBackdrop" />
+
+                <TextView
+                    android:id="@+id/textViewPlatforms"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/textViewPlatformsLabel"
+                    tools:text="PC, PlayStation 5, Xbox Series S/X" />
+
+                <!-- Website Button -->
+                <Button
+                    android:id="@+id/websiteButton"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/visit_website"
+                    android:textAllCaps="false"
+                    app:icon="@android:drawable/ic_menu_compass"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/textViewPlatforms" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- FAB to Add to Collection -->
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/fabAddToCollection"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/add_to_collection"
+            android:textColor="@color/white"
+            app:backgroundTint="@color/primary"
+            app:icon="@android:drawable/ic_input_add"
+            app:iconTint="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cardViewContent"
+            app:layout_constraintVertical_bias="1.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </androidx.core.widget.NestedScrollView>

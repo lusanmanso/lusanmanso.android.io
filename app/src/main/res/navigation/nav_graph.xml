@@ -3,29 +3,52 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/loginFragment">
+    app:startDestination="@id/splashFragment">
 
-    <!-- Actions on Login -->
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="com.example.checkpoint.ui.splash.SplashFragment"
+        android:label="fragment_splash"
+        tools:layout="@layout/fragment_splash">
+        <action
+            android:id="@+id/action_splashFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popUpTo="@id/splashFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_splashFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popUpTo="@id/splashFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.example.checkpoint.ui.auth.LoginFragment"
         android:label="@string/login_fragment_label"
         tools:layout="@layout/fragment_login">
 
-        <!-- Login to Register Action -->
         <action
             android:id="@+id/action_loginFragment_to_registerFragment"
-            app:destination="@id/registerFragment" />
+            app:destination="@id/registerFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
 
-        <!-- Login to Main -->
         <action
-            android:id="@+id/action_loginFragment_to_secondFragment"
-            app:destination="@+id/secondFragment"
+            android:id="@+id/action_loginFragment_to_homeFragment"
+            app:destination="@+id/homeFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
             app:popUpTo="@id/loginFragment"
             app:popUpToInclusive="true" />
     </fragment>
 
-    <!-- Actions on Register -->
     <fragment
         android:id="@+id/registerFragment"
         android:name="com.example.checkpoint.ui.auth.RegisterFragment"
@@ -35,12 +58,13 @@
         <action
             android:id="@+id/action_registerFragment_to_loginFragment"
             app:destination="@id/loginFragment"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
             app:popUpTo="@id/loginFragment"
             app:popUpToInclusive="false" />
 
     </fragment>
 
-    <!-- Actions on Home
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.example.checkpoint.ui.home.HomeFragment"
@@ -48,19 +72,33 @@
         tools:layout="@layout/fragment_home">
 
         <action
-            android:id="@id/action_homeFragment_to_gameDetailFragment"
-            app:destination="@+id/gameDetailFragment" />
-    </fragment> -->
+            android:id="@+id/action_homeFragment_to_gameDetailFragment"
+            app:destination="@+id/gameDetailFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
 
-    <!-- Actions on Game Detail
     <fragment
-        android:id="@id/gameDetailFragment"
+        android:id="@+id/gameDetailFragment"
         android:name="com.example.checkpoint.ui.detail.GameDetailFragment"
         android:label="@string/detail_fragment_label"
         tools:layout="@layout/fragment_game_detail" >
         <argument
             android:name="gameId"
             app:argType="integer" />
-    </fragment> -->
+    </fragment>
+
+    <fragment
+        android:id="@+id/favoritesFragment"
+        android:name="com.example.checkpoint.ui.favorites.FavoritesFragment"
+        android:label="@string/favorites_title"
+        tools:layout="@layout/fragment_favorites">
+
+        <action
+            android:id="@+id/action_favoritesFragment_to_gameDetailFragment"
+            app:destination="@id/gameDetailFragment" />
+    </fragment>
 
 </navigation>

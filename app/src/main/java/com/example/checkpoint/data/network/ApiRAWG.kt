@@ -14,7 +14,9 @@ interface ApiRAWG {
         @Query("page") page: Int,
         @Query("page_size") pageSize: Int,
         @Query("search") search: String? = null,
-        // TODO: Add more queries for filtering
+        @Query("genres") genres: String? = null,
+        @Query("ordering") ordering: String? = null,
+        @Query("platforms") platforms: String? = null
     ): Response<GameResponse>
 
     @GET("games/{id}")

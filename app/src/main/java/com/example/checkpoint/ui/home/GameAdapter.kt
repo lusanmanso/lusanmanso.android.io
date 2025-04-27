@@ -5,55 +5,84 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide // For the img
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.example.checkpoint.R
 import com.example.checkpoint.data.models.Game
-import com.example.checkpoint.databinding.ItemGameBinding // ViewBinding of the item
+import com.example.checkpoint.databinding.ItemGameBinding
 
-class GameAdapter(private val onClickListener: (Game) -> Unit): ListAdapter<Game, GameAdapter.GameViewHolder>(GameDiffCallback()) {
-    // ViewHolder contains the references to the views of the item (videogames)
+class GameAdapter(
+    private val onGameClick: (Game) -> Unit,
+    private val onFavoriteClick: (Game) -> Unit // Added back favorite click listener
+) : ListAdapter<Game, GameAdapter.GameViewHolder>(GameDiffCallback()) { // Simplified ListAdapter type back to Game directly if loading indicator handled differently
+
+    // ViewHolder for a game
     inner class GameViewHolder(private val binding: ItemGameBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(game: Game) {
             binding.textViewGameName.text = game.name
-            binding.textViewGameRating.text = game.rating.toString()
+            // Use String.format for rating to handle nulls safely and format
+            binding.textViewGameRating.text = String.format("%.1f / 5", game.rating ?: 0.0)
+            binding.textViewReleaseDate.text = game.released ?: itemView.context.getString(R.string.tba)
 
-            // Load images with Glide
-            Glide.with(binding.imageViewGameBackground.context)
+            Glide.with(itemView.context)
                 .load(game.backgroundImage)
-                .placeholder(R.drawable.ic_launcher_background)
-                .error(R.drawable.ic_launcher_foreground)
+                .transition(DrawableTransitionOptions.withCrossFade())
+                .placeholder(R.drawable.ic_launcher_background) // Placeholder
+                .error(R.drawable.ic_launcher_foreground) // Error placeholder
                 .into(binding.imageViewGameBackground)
 
-            // Listener when clicking on videogame item
+            // Set click listener for the whole item
             binding.root.setOnClickListener {
-                onClickListener(game)
+                onGameClick(game)
             }
+
+            // Set click listener for the favorite icon
+            binding.imageViewFavorite.setOnClickListener {
+                onFavoriteClick(game)
+                // Optional: Immediately toggle icon state visually for responsiveness
+                // This assumes the ViewModel call will succeed. A more robust solution
+                // would wait for confirmation or observe a LiveData.
+                // toggleFavoriteIcon(!game.isFavorite) // Assuming 'isFavorite' exists
+            }
+
+            // Update favorite icon based on game state (Requires 'isFavorite' field in Game model)
+            // val isFavorite = game.isFavorite // Assuming 'isFavorite' boolean field exists in Game model
+            // toggleFavoriteIcon(isFavorite)
+            // Placeholder: Set default icon until favorite status is available in Game model
+            binding.imageViewFavorite.setImageResource(R.drawable.ic_favorite_border)
         }
+
+        // Helper function to update icon (optional)
+        // private fun toggleFavoriteIcon(isFavorite: Boolean) {
+        //     val favoriteIconRes = if (isFavorite) R.drawable.ic_favorite else R.drawable.ic_favorite_border
+        //     binding.imageViewFavorite.setImageResource(favoriteIconRes)
+        // }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GameViewHolder {
-        // Inflate the item layout blablabla
-        val binding = ItemGameBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return GameViewHolder(binding) // Returns a new instance of the ViewHolder
+        val binding = ItemGameBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
+        return GameViewHolder(binding)
     }
 
-    // New views (invocates the layout manager for it and replaces them)
     override fun onBindViewHolder(holder: GameViewHolder, position: Int) {
-        val currentGame = getItem(position)
-        holder.bind(currentGame)
+        holder.bind(getItem(position))
     }
 
-    // DiffUtil Callback helps the List Adapter to determine what items have changed
-    class GameDiffCallback: DiffUtil.ItemCallback<Game>() {
+    // DiffUtil for comparing Game objects
+    class GameDiffCallback : DiffUtil.ItemCallback<Game>() {
         override fun areItemsTheSame(oldItem: Game, newItem: Game): Boolean {
             return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(oldItem: Game, newItem: Game): Boolean {
-            return oldItem == newItem // Compare ALL the data
+            // Compare relevant fields, including isFavorite for visual updates
+            return oldItem == newItem
         }
-
     }
 }

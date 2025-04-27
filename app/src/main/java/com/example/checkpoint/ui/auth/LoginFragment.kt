@@ -54,15 +54,15 @@ class LoginFragment : Fragment() {
                 return@setOnClickListener
             }
 
-            // Sign In
+            // Sign In with email and password
             auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(requireActivity()) { task ->
-                if (task.isSuccessful) { // Success: Navigate
+                if (task.isSuccessful) { // Success: navigate
                     Log.d("LoginFragment", "signInWithEmail: Success")
                     val user = auth.currentUser
                     Toast.makeText(context, "Authentication: Success", Toast.LENGTH_SHORT).show()
                     // TODO: Navigate to the next fragment of games (I need to implement second)
-                    findNavController().navigate(R.id.action_loginFragment_to_secondFragment, null, androidx.navigation.NavOptions.Builder().setPopUpTo(R.id.loginFragment, true).build())
-                } else { // Fail: Display message
+                    findNavController().navigate(R.id.action_loginFragment_to_homeFragment, null, androidx.navigation.NavOptions.Builder().setPopUpTo(R.id.loginFragment, true).build())
+                } else { // Failure: display message
                     Log.w("LoginFragment", "signInWithEmail: Failure", task.exception)
                     Toast.makeText(context, "Authentication: Failure - ${task.exception?.message}", Toast.LENGTH_SHORT).show()
                     // TODO: Show error message
@@ -75,13 +75,13 @@ class LoginFragment : Fragment() {
         }
     }
 
-    // Extra comprobation ChatGpt recommended to check if user is already logged in
+    // Additional check recommended by ChatGPT to verify if user is already logged in
     override fun onStart() {
         super.onStart()
         val currentUser = auth.currentUser
         if (currentUser != null) {
             Log.d("LoginFragment", "User already logged in: ${currentUser.uid}")
-            findNavController().navigate(R.id.action_loginFragment_to_secondFragment)
+            findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
         }
     }
 

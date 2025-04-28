@@ -41,7 +41,7 @@ class GameDetailViewModel(application: Application) : AndroidViewModel(applicati
         if (userId != null) {
             viewModelScope.launch {
                 try {
-                    val favoriteStatus = favoritesRepository.isFavorite(userId, gameId)
+                    val favoriteStatus = favoritesRepository.isFavorite(gameId.toString())
                     _isFavorite.postValue(favoriteStatus)
                 } catch (e: Exception) {
                     _isFavorite.postValue(false)
@@ -103,10 +103,10 @@ class GameDetailViewModel(application: Application) : AndroidViewModel(applicati
         viewModelScope.launch {
             try {
                 if (currentlyFavorite) {
-                    favoritesRepository.removeFromFavorites(userId, game.id)
+                    favoritesRepository.removeFavorite(game.id.toString())
                     _isFavorite.postValue(false)
                 } else {
-                    favoritesRepository.addToFavorites(userId, game)
+                    favoritesRepository.addFavorite(game)
                     _isFavorite.postValue(true)
                 }
                 _error.postValue(null)

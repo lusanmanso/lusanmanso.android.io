@@ -140,13 +140,13 @@ class HomeViewModel: ViewModel() { // Consider injecting repository: class HomeV
         userId?.let { uid ->
             viewModelScope.launch {
                 try {
-                    val isCurrentlyFavorite = favoritesRepository.isFavorite(uid, game.id) // Check current status
+                    val isCurrentlyFavorite = favoritesRepository.isFavorite(game.id.toString()) // Check current status
                     if (isCurrentlyFavorite) {
-                        favoritesRepository.removeFromFavorites(uid, game.id)
+                        favoritesRepository.removeFavorite(game.id.toString())
                         Log.d("HomeViewModel", "Removed favorite: ${game.id}")
                         // Optionally update game item in _games LiveData or notify adapter
                     } else {
-                        favoritesRepository.addToFavorites(uid, game)
+                        favoritesRepository.addFavorite(game)
                         Log.d("HomeViewModel", "Added favorite: ${game.id}")
                         // Optionally update game item in _games LiveData or notify adapter
                     }

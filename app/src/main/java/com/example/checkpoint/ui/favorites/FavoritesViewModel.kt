@@ -33,7 +33,7 @@ class FavoritesViewModel : ViewModel() {
         _isLoading.value = true
         viewModelScope.launch {
             try {
-                val favorites = favoritesRepository.getFavoriteGames(currentUser.uid)
+                val favorites = favoritesRepository.getFavorites()
                 _favoriteGames.value = favorites
                 _error.value = null
             } catch (e: Exception) {
@@ -53,7 +53,7 @@ class FavoritesViewModel : ViewModel() {
 
         viewModelScope.launch {
             try {
-                favoritesRepository.removeFromFavorites(currentUser.uid, gameId)
+                favoritesRepository.removeFavorite(gameId.toString())
                 loadFavoriteGames() // Update list after deleting
             } catch (e: Exception) {
                 _error.postValue("Failed to remove favorite: ${e.message}")            }

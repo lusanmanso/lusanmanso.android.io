@@ -7,9 +7,9 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface ApiRAWG {
+public interface ApiRAWG {
     @GET("games")
-    suspend fun getGames(
+    public suspend fun getGames(
         @Query("key") apiKey: String,
         @Query("page") page: Int,
         @Query("page_size") pageSize: Int,
@@ -20,7 +20,7 @@ interface ApiRAWG {
     ): Response<GameResponse>
 
     @GET("games/{id}")
-    suspend fun getGameDetails(
+    public suspend fun getGameDetails(
         @Path("id") gameId: Int,
         @Query("key") apiKey: String
     ): Response<GameDetail>

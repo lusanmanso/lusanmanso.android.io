@@ -65,7 +65,7 @@ class RegisterFragment: Fragment() {
             auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(requireActivity()) { task ->
                 if (task.isSuccessful) {
                     Log.d("RegisterFragment", "createUserWithEmail: Success")
-                    val user = auth.currentUser
+                    // val user = auth.currentUser
                     Toast.makeText(context, "Authentication: Success", Toast.LENGTH_SHORT).show()
                     // Navigate to Login (TODO: ¿O mejor lo llevo ya a la aplicación?)
                     findNavController().navigate(R.id.action_registerFragment_to_loginFragment)

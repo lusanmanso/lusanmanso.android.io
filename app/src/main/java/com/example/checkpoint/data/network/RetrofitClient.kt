@@ -1,6 +1,5 @@
 package com.example.checkpoint.data.network
 
-import android.media.RingtoneManager
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit

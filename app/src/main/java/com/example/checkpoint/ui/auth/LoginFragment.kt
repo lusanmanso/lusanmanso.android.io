@@ -10,7 +10,6 @@ import android.widget.Toast // Toast Messages
 import androidx.navigation.fragment.findNavController
 import com.example.checkpoint.R
 import com.example.checkpoint.databinding.FragmentLoginBinding
-import com.example.checkpoint.databinding.FragmentRegisterBinding
 import com.google.firebase.auth.FirebaseAuth // Firebase Auth
 import com.google.firebase.auth.ktx.auth // KTX
 import com.google.firebase.ktx.Firebase // Firebase KTX
@@ -38,7 +37,6 @@ class LoginFragment : Fragment() {
         auth = Firebase.auth
 
         return binding.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -58,7 +56,7 @@ class LoginFragment : Fragment() {
             auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(requireActivity()) { task ->
                 if (task.isSuccessful) { // Success: navigate
                     Log.d("LoginFragment", "signInWithEmail: Success")
-                    val user = auth.currentUser
+                    // val user = auth.currentUser
                     Toast.makeText(context, "Authentication: Success", Toast.LENGTH_SHORT).show()
                     // TODO: Navigate to the next fragment of games (I need to implement second)
                     findNavController().navigate(R.id.action_loginFragment_to_homeFragment, null, androidx.navigation.NavOptions.Builder().setPopUpTo(R.id.loginFragment, true).build())

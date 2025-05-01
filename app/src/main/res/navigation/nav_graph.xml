@@ -29,9 +29,7 @@
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.example.checkpoint.ui.auth.LoginFragment"
-        android:label="@string/login_fragment_label"
-        tools:layout="@layout/fragment_login">
-
+        android:label="@string/login_fragment_label" tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_loginFragment_to_registerFragment"
             app:destination="@id/registerFragment"
@@ -42,35 +40,27 @@
 
         <action
             android:id="@+id/action_loginFragment_to_homeFragment"
-            app:destination="@+id/homeFragment"
+            app:destination="@id/homeFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
-            app:popUpTo="@id/loginFragment"
-            app:popUpToInclusive="true" />
-    </fragment>
+            app:popUpTo="@id/nav_graph"           app:popUpToInclusive="true" />        </fragment>
 
     <fragment
         android:id="@+id/registerFragment"
         android:name="com.example.checkpoint.ui.auth.RegisterFragment"
-        android:label="@string/register_fragment_label"
-        tools:layout="@layout/fragment_register">
-
+        android:label="@string/register_fragment_label" tools:layout="@layout/fragment_register">
         <action
             android:id="@+id/action_registerFragment_to_loginFragment"
             app:destination="@id/loginFragment"
             app:enterAnim="@anim/slide_in_left"
             app:exitAnim="@anim/slide_out_right"
             app:popUpTo="@id/loginFragment"
-            app:popUpToInclusive="false" />
-
-    </fragment>
+            app:popUpToInclusive="false" /> </fragment>
 
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.example.checkpoint.ui.home.HomeFragment"
-        android:label="@string/home_fragment_label"
-        tools:layout="@layout/fragment_home">
-
+        android:label="@string/home_fragment_label" tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_homeFragment_to_gameDetailFragment"
             app:destination="@+id/gameDetailFragment"
@@ -83,22 +73,39 @@
     <fragment
         android:id="@+id/gameDetailFragment"
         android:name="com.example.checkpoint.ui.detail.GameDetailFragment"
-        android:label="@string/detail_fragment_label"
-        tools:layout="@layout/fragment_game_detail" >
+        android:label="@string/detail_fragment_label" tools:layout="@layout/fragment_game_detail" >
         <argument
             android:name="gameId"
             app:argType="integer" />
+        <argument
+            android:name="gameName"
+            app:argType="string"
+            android:defaultValue="Game Details"
+            app:nullable="true"/>
     </fragment>
 
     <fragment
         android:id="@+id/favoritesFragment"
         android:name="com.example.checkpoint.ui.favorites.FavoritesFragment"
-        android:label="@string/favorites_title"
-        tools:layout="@layout/fragment_favorites">
-
+        android:label="" tools:layout="@layout/fragment_favorites">
         <action
             android:id="@+id/action_favoritesFragment_to_gameDetailFragment"
-            app:destination="@id/gameDetailFragment" />
+            app:destination="@id/gameDetailFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.checkpoint.ui.profile.ProfileFragment"
+        android:label="" tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true"/>
     </fragment>
 
 </navigation>

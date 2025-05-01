@@ -11,31 +11,29 @@ import com.example.checkpoint.data.models.GameResponse
 import com.example.checkpoint.data.network.ApiRAWG
 import com.example.checkpoint.data.network.RetrofitClient
 import kotlinx.coroutines.launch
-import retrofit2.Response // <-- Importar Response de Retrofit
+import retrofit2.Response
 
-class HomeViewModel : ViewModel() {
+public class HomeViewModel : ViewModel() {
 
     private val _games = MutableLiveData<List<Game>>()
-    val games: LiveData<List<Game>> = _games
+    public val games: LiveData<List<Game>> = _games
 
     private val _isLoading = MutableLiveData<Boolean>()
-    val isLoading: LiveData<Boolean> = _isLoading
+    public val isLoading: LiveData<Boolean> = _isLoading
 
     private val _errorMessage = MutableLiveData<String?>()
-    val errorMessage: LiveData<String?> = _errorMessage
+    public val errorMessage: LiveData<String?> = _errorMessage
 
     private var currentPage = 1
     private var isFetching = false
     private var hasMoreGames = true
-    private val pageSize = 20 // Define cuántos juegos cargar por página
+    private val pageSize = 20
 
-    // --- Cambio: Renombrar variable a camelCase ---
     private val apiKey = BuildConfig.RAWG_API_KEY
 
     private val apiService: ApiRAWG = RetrofitClient.instance
 
     init {
-        // --- Cambio: Simplificar condición ---
         if (apiKey.isEmpty()) {
             Log.e("HomeViewModel", "API Key for RAWG is missing or invalid in secrets.properties / BuildConfig.")
             _errorMessage.value = "API Key missing. Please configure secrets.properties."
@@ -44,64 +42,71 @@ class HomeViewModel : ViewModel() {
         }
     }
 
-    fun loadGames() {
+    private fun loadGames() {
         if (isFetching || !hasMoreGames) return
 
         viewModelScope.launch {
             isFetching = true
-            // Mostrar ProgressBar solo al cargar la primera página o si se prefiere siempre
             if (currentPage == 1) {
                 _isLoading.value = true
             }
-            _errorMessage.value = null // Limpiar errores previos al intentar cargar
+            _errorMessage.value = null
 
             try {
                 Log.d("HomeViewModel", "Fetching games page $currentPage with key $apiKey")
 
-                // --- Cambios: Añadir pageSize y manejar Response<T> ---
-                val response: Response<GameResponse> = apiService.getGames(apiKey, currentPage, pageSize) // Pasar pageSize
+                val response: Response<GameResponse> = apiService.getGames(apiKey, currentPage, pageSize)
 
                 if (response.isSuccessful) {
-                    val gameResponse = response.body() // Obtener el cuerpo GameResponse
+                    val gameResponse = response.body()
                     if (gameResponse != null) {
                         val currentList = _games.value ?: emptyList()
                         _games.value = currentList + gameResponse.results
-                        hasMoreGames = true
+                        // Increment currentPage ONLY if the response was successful and we got results
+                        currentPage++
+                        // Assume there are more games if the result list size equals page size, otherwise assume we reached the end
+                        hasMoreGames = gameResponse.results.size == pageSize
                     } else {
-                        // Respuesta exitosa pero cuerpo nulo (raro para esta API)
                         Log.e("HomeViewModel", "Successful response but empty body")
                         _errorMessage.value = "Error: Received empty response body."
-                        hasMoreGames = false // Detener paginación si hay error
+                        hasMoreGames = false
                     }
                 } else {
-                    // Manejar error HTTP (ej. 401 Unauthorized, 404 Not Found, 500 Server Error)
                     val errorBody = response.errorBody()?.string() ?: "Unknown error"
                     Log.e("HomeViewModel", "API Error: ${response.code()} - $errorBody")
                     _errorMessage.value = "Error ${response.code()}: Could not load games. $errorBody"
-                    hasMoreGames = false // Detener paginación si hay error
+                    hasMoreGames = false
                 }
-                // --- Fin Cambios ---
 
             } catch (e: Exception) {
-                // Manejar otros errores (ej. red, parseo JSON)
                 Log.e("HomeViewModel", "Error fetching games", e)
                 e.printStackTrace()
                 _errorMessage.value = "Error loading games: ${e.message}"
-                // Considerar no deshabilitar futuras cargas si fue un error temporal
-                hasMoreGames = false // Detener paginación si hay error
+                hasMoreGames = false
             } finally {
-                _isLoading.value = false // Ocultar ProgressBar
+                _isLoading.value = false
                 isFetching = false
             }
         }
     }
 
-    fun loadMoreGames() {
+    public fun loadMoreGames() {
         Log.d("HomeViewModel", "loadMoreGames called. isFetching: $isFetching, hasMoreGames: $hasMoreGames")
-        // Cargar más solo si no se está cargando ya y si la API indicó que hay más páginas
         if (!isFetching && hasMoreGames) {
+            // currentPage is incremented inside loadGames upon successful fetch
             loadGames()
         }
     }
+
+    // Added refresh function
+    public fun refreshGames() {
+        // Reset state
+        currentPage = 1
+        hasMoreGames = true
+        isFetching = false
+        _games.value = emptyList() // Clear existing games immediately
+
+        // Load first page
+        loadGames()
+    }
 }
-// --- End of HomeViewModel.kt ---

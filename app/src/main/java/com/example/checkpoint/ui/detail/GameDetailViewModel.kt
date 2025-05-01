@@ -12,32 +12,31 @@ import com.example.checkpoint.data.network.RetrofitClient
 import com.example.checkpoint.data.repository.FavoritesRepository
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
-import retrofit2.Response // Retrofit Response or else it won't work :(
+import retrofit2.Response
 import java.lang.Exception
 
-class GameDetailViewModel(application: Application) : AndroidViewModel(application) {
+public class GameDetailViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _isLoading = MutableLiveData<Boolean>()
-    val isLoading: LiveData<Boolean> get() = _isLoading
+    public val isLoading: LiveData<Boolean> get() = _isLoading
 
     private val _gameDetails = MutableLiveData<GameDetail?>()
-    val gameDetails: MutableLiveData<GameDetail?> get() = _gameDetails
+    public val gameDetails: MutableLiveData<GameDetail?> get() = _gameDetails
 
     private val _error = MutableLiveData<String?>()
-    val error: LiveData<String?> get() = _error
+    public val error: LiveData<String?> get() = _error
 
     private val _isFavorite = MutableLiveData<Boolean>()
-    val isFavorite: LiveData<Boolean> get() = _isFavorite
+    public val isFavorite: LiveData<Boolean> get() = _isFavorite
 
     private val favoritesRepository = FavoritesRepository()
     private val auth = FirebaseAuth.getInstance()
 
-    fun loadGameDetails(gameId: Int) {
+    public fun loadGameDetails(gameId: Int) {
         _isLoading.value = true
         _error.value = null
         val userId = auth.currentUser?.uid
 
-        // Check favorite status
         if (userId != null) {
             viewModelScope.launch {
                 try {
@@ -45,14 +44,13 @@ class GameDetailViewModel(application: Application) : AndroidViewModel(applicati
                     _isFavorite.postValue(favoriteStatus)
                 } catch (e: Exception) {
                     _isFavorite.postValue(false)
-                    // _error.postValue("Could not check favorite status: ${e.message}")
+
                 }
             }
         } else {
             _isFavorite.value = false
         }
 
-        // Fetch game details from API
         viewModelScope.launch {
             try {
                 val gameDetailResponse: Response<GameDetail> = RetrofitClient.instance.getGameDetails(
@@ -61,10 +59,10 @@ class GameDetailViewModel(application: Application) : AndroidViewModel(applicati
                 )
 
                 if (gameDetailResponse.isSuccessful) {
-                    // Explicitly define type here for clarity
+
                     val detail: GameDetail? = gameDetailResponse.body()
                     if (detail != null) {
-                        _gameDetails.postValue(detail) // Post the GameDetail object
+                        _gameDetails.postValue(detail)
                     } else {
                         _error.postValue("Response body was empty.")
                     }
@@ -80,7 +78,7 @@ class GameDetailViewModel(application: Application) : AndroidViewModel(applicati
         }
     }
 
-    fun toggleFavorite() {
+    public fun toggleFavorite() {
         val userId = auth.currentUser?.uid ?: run {
             _error.postValue("You must be logged in to manage favorites.")
             return
@@ -116,7 +114,7 @@ class GameDetailViewModel(application: Application) : AndroidViewModel(applicati
         }
     }
 
-    fun clearError() {
+    public fun clearError() {
         _error.value = null
     }
 }

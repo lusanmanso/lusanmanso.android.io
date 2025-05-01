@@ -9,21 +9,21 @@ import com.example.checkpoint.data.repository.FavoritesRepository
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 
-class FavoritesViewModel : ViewModel() {
+public class FavoritesViewModel : ViewModel() {
 
     private val favoritesRepository = FavoritesRepository()
     private val auth = FirebaseAuth.getInstance()
 
     private val _favoriteGames = MutableLiveData<List<Game>>()
-    val favoriteGames: LiveData<List<Game>> get() = _favoriteGames
+    public val favoriteGames: LiveData<List<Game>> get() = _favoriteGames
 
     private val _isLoading = MutableLiveData<Boolean>()
-    val isLoading: LiveData<Boolean> get() = _isLoading
+    public val isLoading: LiveData<Boolean> get() = _isLoading
 
     private val _error = MutableLiveData<String?>()
-    val error: LiveData<String?> get() = _error
+    public val error: LiveData<String?> get() = _error
 
-    fun loadFavoriteGames() {
+    public fun loadFavoriteGames() {
         val currentUser = auth.currentUser ?: run {
             _error.value = "Unidentified user"
             _favoriteGames.value = emptyList()
@@ -45,24 +45,23 @@ class FavoritesViewModel : ViewModel() {
         }
     }
 
-    fun addFavorite(game: Game) {
+    public fun addFavorite(game: Game) {
         val currentUser = auth.currentUser ?: run {
             _error.value = "Login required to add favorite"
             return
         }
         viewModelScope.launch {
             try {
-                // Asume que el repositorio tiene un método addFavorite que recibe el objeto Game
-                // o los datos necesarios (game.id, game.name, game.background_image, etc.)
+
                 favoritesRepository.addFavorite(game)
-                loadFavoriteGames() // Actualiza la lista después de añadir
+                loadFavoriteGames()
             } catch (e: Exception) {
                 _error.postValue("Failed to add favorite: ${e.message}")
             }
         }
     }
 
-    fun removeFromFavorites(gameId: Int) {
+    public fun removeFromFavorites(gameId: Int) {
         val currentUser = auth.currentUser ?: run {
             _error.value = "Login required to remove from favorites"
             return
@@ -71,13 +70,13 @@ class FavoritesViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 favoritesRepository.removeFavorite(gameId.toString())
-                loadFavoriteGames() // Update list after deleting
+                loadFavoriteGames()
             } catch (e: Exception) {
                 _error.postValue("Failed to remove favorite: ${e.message}")            }
         }
     }
 
-    fun clearError() {
+    public fun clearError() {
         _error.value = null
     }
 }

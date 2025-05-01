@@ -1,8 +1,6 @@
-// Author: Pair Programmer
-// OS support: Android
-// Description: Fragment displaying games, using FavoritesViewModel for favorite logic.
 package com.example.checkpoint.ui.home
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -22,22 +20,21 @@ import com.example.checkpoint.data.models.Game
 import com.example.checkpoint.databinding.FragmentHomeBinding
 import com.example.checkpoint.ui.favorites.FavoritesViewModel
 import com.google.firebase.auth.FirebaseAuth
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 
-class HomeFragment : Fragment() {
+public class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel: HomeViewModel by viewModels()
-    private val favoritesViewModel: FavoritesViewModel by activityViewModels() // Obtener FavoritesViewModel
+    private val favoritesViewModel: FavoritesViewModel by activityViewModels()
 
     private lateinit var gameAdapter: GameAdapter
     private lateinit var layoutManager: RecyclerView.LayoutManager
 
-    // Guardamos el estado actual de los favoritos para consultarlo fácilmente
+
     private var currentFavoriteIds = setOf<Int>()
-    // State to toggle between grid and list
+
     private var isGridView = true
 
     override fun onCreateView(
@@ -54,15 +51,15 @@ class HomeFragment : Fragment() {
         setupRecyclerView()
         observeViewModels()
 
-        // Toggle button to switch layout
+
         binding.buttonToggleView.setOnClickListener {
             isGridView = !isGridView
             updateLayoutView()
         }
-        // Initialize layout state
+
         updateLayoutView()
 
-        // Cargar favoritos iniciales si es necesario
+
         favoritesViewModel.loadFavoriteGames()
     }
 
@@ -75,7 +72,7 @@ class HomeFragment : Fragment() {
                 findNavController().navigate(action)
             },
             onFavoriteClick = { game: Game ->
-                toggleFavorite(game) // Llama a la función del fragment
+                toggleFavorite(game)
             }
         )
 
@@ -86,18 +83,17 @@ class HomeFragment : Fragment() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
 
-                // --- INICIO CAMBIO ---
-                // Determinar el primer item visible según el tipo de LayoutManager
+
                 val firstVisibleItemPosition = when (layoutManager) {
                     is LinearLayoutManager -> (layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
                     is GridLayoutManager -> (layoutManager as GridLayoutManager).findFirstVisibleItemPosition()
-                    else -> 0 // Valor por defecto o manejo de error si es otro tipo (poco probable aquí)
+                    else -> 0
                 }
-                // --- FIN CAMBIO ---
+
                 val visibleItemCount = layoutManager.childCount
                 val totalItemCount = layoutManager.itemCount
 
-                // Lógica de paginación (sin cambios)
+
                 if (visibleItemCount + firstVisibleItemPosition >= totalItemCount - 5 && firstVisibleItemPosition >= 0) {
                     viewModel.loadMoreGames()
                 }
@@ -106,7 +102,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun observeViewModels() {
-        // Observadores para HomeViewModel
+
         viewModel.games.observe(viewLifecycleOwner) { games ->
             gameAdapter.submitList(games)
             updateEmptyState()
@@ -120,29 +116,27 @@ class HomeFragment : Fragment() {
             updateEmptyState()
         }
 
-        // --- Observador para FavoritesViewModel ---
-        // Observa la LISTA de juegos favoritos
+
         favoritesViewModel.favoriteGames.observe(viewLifecycleOwner) { favoriteGamesList ->
-            // Crear el mapa de estado (Map<Int, Boolean>) a partir de la lista de juegos
+
             val favoriteMap = favoriteGamesList?.associate { it.id to true } ?: emptyMap()
-            // Guardar los IDs actuales para la función toggleFavorite
+
             currentFavoriteIds = favoriteMap.keys
-            // Actualizar el adaptador
+
             gameAdapter.updateFavoriteStatus(favoriteMap)
             Log.d("HomeFragment", "Favorite status derived from list: $favoriteMap")
         }
 
-        // (Opcional) Observar errores del FavoritesViewModel
+
         favoritesViewModel.error.observe(viewLifecycleOwner) { errorMsg ->
             if (errorMsg != null) {
                 Toast.makeText(requireContext(), "Favorite Error: $errorMsg", Toast.LENGTH_SHORT).show()
-                favoritesViewModel.clearError() // Limpiar error después de mostrarlo
+                favoritesViewModel.clearError()
             }
         }
-        // --- Fin Observador para FavoritesViewModel ---
+
     }
 
-    // Función auxiliar para manejar la visibilidad (sin cambios)
     private fun updateEmptyState() {
         val isLoading = viewModel.isLoading.value ?: false
         val gamesList = viewModel.games.value
@@ -156,7 +150,6 @@ class HomeFragment : Fragment() {
         }
     }
 
-    // --- Esta función ahora usa add/remove de favoritesViewModel ---
     private fun toggleFavorite(game: Game) {
         val currentUser = FirebaseAuth.getInstance().currentUser
         if (currentUser == null) {
@@ -164,21 +157,21 @@ class HomeFragment : Fragment() {
             return
         }
 
-        // Consultar el estado usando la variable actualizada por el observer
+
         val isCurrentlyFavorite = currentFavoriteIds.contains(game.id)
 
         if (isCurrentlyFavorite) {
-            // Llama a removeFromFavorites en FavoritesViewModel
+
             favoritesViewModel.removeFromFavorites(game.id)
             Log.d("HomeFragment", "Calling removeFromFavorites for game ${game.id}")
         } else {
-            // Llama a addFavorite en FavoritesViewModel (NECESITA SER AÑADIDO AL VIEWMODEL)
+
             favoritesViewModel.addFavorite(game)
             Log.d("HomeFragment", "Calling addFavorite for game ${game.id}")
         }
     }
 
-    // Function to switch RecyclerView layout manager and update button text
+    @SuppressLint("NotifyDataSetChanged")
     private fun updateLayoutView() {
         layoutManager = if (isGridView) {
             GridLayoutManager(requireContext(), 2)
@@ -186,10 +179,10 @@ class HomeFragment : Fragment() {
             LinearLayoutManager(requireContext())
         }
         binding.recyclerViewGames.layoutManager = layoutManager
-        // Update toggle icon instead of text on FloatingActionButton
+
         val iconRes = if (isGridView) R.drawable.ic_list_view else R.drawable.ic_grid_view
         binding.buttonToggleView.setImageResource(iconRes)
-        // Refresh adapter to apply spacing adjustments
+
         gameAdapter.notifyDataSetChanged()
     }
 
@@ -199,4 +192,3 @@ class HomeFragment : Fragment() {
         _binding = null
     }
 }
-// --- End of HomeFragment.kt ---

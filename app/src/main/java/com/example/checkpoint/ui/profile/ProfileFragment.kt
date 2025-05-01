@@ -11,7 +11,7 @@ import com.example.checkpoint.R
 import com.example.checkpoint.databinding.FragmentProfileBinding
 import com.google.firebase.auth.FirebaseAuth
 
-class ProfileFragment : Fragment() {
+public class ProfileFragment : Fragment() {
 
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!

@@ -14,7 +14,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
-class RegisterFragment: Fragment() {
+public class RegisterFragment: Fragment() {
     // Firebase
     private lateinit var auth: FirebaseAuth
 

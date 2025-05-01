@@ -1,22 +1,22 @@
+// Author: Pair Programmer
+// OS support: All
+// Description: Manages user preferences like theme settings using SharedPreferences.
 package com.example.checkpoint.utils
 
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.edit
 
-/**
- * Class for managing user preferences, including dark/light theme
- */
-class UserPreferences(context: Context) {
+public class UserPreferences private constructor(context: Context) { // Made constructor private for singleton
 
-    companion object {
+    public companion object {
         private const val PREF_NAME = "checkpoint_preferences"
         private const val KEY_NIGHT_MODE = "night_mode"
 
-            // Singleton instance
         @Volatile private var INSTANCE: UserPreferences? = null
 
-        fun getInstance(context: Context): UserPreferences {
+        public fun getInstance(context: Context): UserPreferences {
             return INSTANCE ?: synchronized(this) {
                 INSTANCE ?: UserPreferences(context.applicationContext).also { INSTANCE = it }
             }
@@ -25,28 +25,18 @@ class UserPreferences(context: Context) {
 
     private val prefs: SharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
 
-    /**
-     * Gets the current theme mode
-     * @return true if in dark mode, false if in light mode
-     */
-    fun isNightMode(): Boolean {
+    private fun isNightMode(): Boolean {
         return prefs.getBoolean(KEY_NIGHT_MODE, false)
     }
 
-    /**
-     * Toggles the theme mode and applies it
-     */
-    fun toggleNightMode() {
+    public fun toggleNightMode() {
         val isCurrentlyNightMode = isNightMode()
-        prefs.edit().putBoolean(KEY_NIGHT_MODE, !isCurrentlyNightMode).apply()
+        prefs.edit { putBoolean(KEY_NIGHT_MODE, !isCurrentlyNightMode) }
 
         applyTheme(!isCurrentlyNightMode)
     }
 
-    /**
-     * Applies the saved theme at application start
-     */
-    fun applyThemeOnStart() {
+    public fun applyThemeOnStart() {
         applyTheme(isNightMode())
     }
 

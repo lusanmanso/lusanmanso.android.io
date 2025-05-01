@@ -2,7 +2,7 @@ package com.example.checkpoint.data.models
 
 import com.google.gson.annotations.SerializedName
 
-data class GameDetail(
+public data class GameDetail(
     val id: Int,
     val slug: String,
     val name: String,
@@ -32,53 +32,53 @@ data class GameDetail(
     val publishers: List<Publisher>?,
 )
 
-data class Rating(
+public data class Rating(
     val id: Int,
     val title: String?,
     val count: Int?,
     val percent: Double?
 )
 
-data class PlatformInfo(
+public data class PlatformInfo(
     val platform: PlatformDetail?,
     @SerializedName("released_at") val releasedAt: String?,
     val requirements: Requirements?
 )
 
-data class PlatformDetail(
+public data class PlatformDetail(
     val id: Int,
     val slug: String?,
     val name: String?
 )
 
-data class Requirements(
+public data class Requirements(
     val minimum: String?,
     val recommended: String?
 )
 
-data class StoreInfo(
+public data class StoreInfo(
     val store: StoreDetail?
 )
 
-data class StoreDetail(
+public data class StoreDetail(
     val id: Int,
     val slug: String?,
     val name: String?
 )
 
-data class Developer(
+public data class Developer(
     val id: Int,
     val name: String?,
     val slug: String?
 )
 
-data class Genre(
+public data class Genre(
     val id: Int,
     val name: String?,
     val slug: String?
 )
 
-data class Tag(
+public data class Tag(
     val id: Int,
     val name: String?,
     val slug: String?,
@@ -87,7 +87,7 @@ data class Tag(
     @SerializedName("image_background") val imageBackground: String?
 )
 
-data class Publisher(
+public data class Publisher(
     val id: Int,
     val name: String?,
     val slug: String?

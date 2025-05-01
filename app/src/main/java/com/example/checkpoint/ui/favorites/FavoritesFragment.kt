@@ -16,7 +16,7 @@ import com.example.checkpoint.databinding.FragmentFavoritesBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.example.checkpoint.ui.home.GameAdapter
 
-class FavoritesFragment : Fragment() {
+public class FavoritesFragment : Fragment() {
 
     private var _binding: FragmentFavoritesBinding? = null
     private val binding get() = _binding!!

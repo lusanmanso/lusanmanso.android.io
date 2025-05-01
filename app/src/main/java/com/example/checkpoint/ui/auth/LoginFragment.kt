@@ -17,7 +17,7 @@ import com.google.firebase.ktx.Firebase // Firebase KTX
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
-class LoginFragment : Fragment() {
+public class LoginFragment : Fragment() {
 
     private var _binding: FragmentLoginBinding? = null
 

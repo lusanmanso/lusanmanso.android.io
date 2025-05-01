@@ -5,7 +5,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 
-class FavoritesRepository {
+public class FavoritesRepository {
     private val firestore = FirebaseFirestore.getInstance()
     private val auth = FirebaseAuth.getInstance()
 
@@ -13,7 +13,7 @@ class FavoritesRepository {
         firestore.collection("users").document(userId).collection("favorites")
     }
 
-    suspend fun addFavorite(game: Game) {
+    public suspend fun addFavorite(game: Game) {
         if (game.id <= 0) throw IllegalArgumentException("Invalid game ID")
 
         val collection = getUserFavoritesCollection()
@@ -25,7 +25,7 @@ class FavoritesRepository {
         }
     }
 
-    suspend fun removeFavorite(gameId: String) {
+    public suspend fun removeFavorite(gameId: String) {
         val collection = getUserFavoritesCollection()
             ?: throw IllegalStateException("User not logged in")
         try {
@@ -35,7 +35,7 @@ class FavoritesRepository {
         }
     }
 
-    suspend fun getFavorites(): List<Game> {
+    public suspend fun getFavorites(): List<Game> {
         val collection = getUserFavoritesCollection()
             ?: return emptyList()
         return try {
@@ -47,7 +47,7 @@ class FavoritesRepository {
         }
     }
 
-    suspend fun isFavorite(gameId: String): Boolean {
+    public suspend fun isFavorite(gameId: String): Boolean {
         val collection = getUserFavoritesCollection()
             ?: return false
         return try {

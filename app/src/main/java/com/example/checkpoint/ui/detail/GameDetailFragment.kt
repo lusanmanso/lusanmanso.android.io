@@ -21,7 +21,7 @@ import com.google.android.material.snackbar.Snackbar
 import androidx.core.net.toUri
 import androidx.core.graphics.toColorInt
 
-class GameDetailFragment : Fragment() {
+public class GameDetailFragment : Fragment() {
 
     private var _binding: FragmentGameDetailBinding? = null
     private val binding get() = _binding!!
@@ -106,7 +106,6 @@ class GameDetailFragment : Fragment() {
         }
         binding.fabFavorite.setImageResource(iconResource)
 
-        // Optional: show visual feedback
         if (isFavorite) {
             Snackbar.make(
                 binding.root,
@@ -118,7 +117,6 @@ class GameDetailFragment : Fragment() {
 
     private fun updateUI(gameDetail: GameDetail) {
         val notAvailable = getString(R.string.not_available) // Default values for unavailable strings
-        // val tba = getString(R.string.tba) //Default value for TBA dates
 
         with(binding) {
             // Title and basic details

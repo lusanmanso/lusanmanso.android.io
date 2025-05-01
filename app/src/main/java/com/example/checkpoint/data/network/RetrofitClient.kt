@@ -7,7 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 // Everything is at https://api.rawg.io/docs/
-object RetrofitClient {
+public object RetrofitClient {
     private const val BASE_URL = "https://api.rawg.io/api/"
 
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
@@ -23,7 +23,7 @@ object RetrofitClient {
         .build()
 
     // Create Retrofit instance with lazy delegation so it's created the first time is accessed
-    val instance: ApiRAWG by lazy {
+    public val instance: ApiRAWG by lazy {
         val retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(okHttpClient)

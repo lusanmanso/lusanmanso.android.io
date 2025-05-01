@@ -12,7 +12,7 @@ import com.example.checkpoint.R
 import com.example.checkpoint.databinding.FragmentSplashBinding
 import com.google.firebase.auth.FirebaseAuth
 
-class SplashFragment : Fragment() {
+public class SplashFragment : Fragment() {
 
     private var _binding: FragmentSplashBinding? = null
     private val binding get() = _binding!!

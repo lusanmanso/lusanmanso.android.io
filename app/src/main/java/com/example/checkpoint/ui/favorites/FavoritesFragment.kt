@@ -13,8 +13,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.checkpoint.R
 import com.example.checkpoint.data.models.Game
 import com.example.checkpoint.databinding.FragmentFavoritesBinding
-import com.example.checkpoint.ui.home.GameAdapter // Correct Adapter import
 import com.google.firebase.auth.FirebaseAuth
+import com.example.checkpoint.ui.home.GameAdapter
 
 class FavoritesFragment : Fragment() {
 
@@ -38,30 +38,33 @@ class FavoritesFragment : Fragment() {
 
         val currentUser = FirebaseAuth.getInstance().currentUser
         if (currentUser == null) {
-            binding.textViewEmptyFavorites.text = getString(R.string.login_required)
+            // Ensure UI is correctly handled when not logged in
+            binding.textViewEmptyFavorites.text = getString(R.string.login_required_to_view_favorites) // Use a specific string
             binding.textViewEmptyFavorites.isVisible = true
             binding.recyclerViewFavorites.isVisible = false
             binding.progressBarFavorites.isVisible = false
             return // Stop setup if not logged in
         }
 
-        setupRecyclerView() // Setup RecyclerView first
-        observeViewModel() // Then observe ViewModel
+        setupRecyclerView()
+        observeViewModel()
 
-        viewModel.loadFavoriteGames() // Load data
+        // Load data only if logged in
+        viewModel.loadFavoriteGames()
     }
 
     private fun setupRecyclerView() {
-        // Instantiate with the corrected GameAdapter (taking two listeners)
         gameAdapter = GameAdapter(
-            // Provide lambda for 'onGameClick' parameter
             onGameClick = { game: Game ->
+                // Navigate to detail, passing the game ID
                 val action = FavoritesFragmentDirections.actionFavoritesFragmentToGameDetailFragment(game.id)
                 findNavController().navigate(action)
             },
-            // Provide lambda for 'onFavoriteClick' parameter
             onFavoriteClick = { game: Game ->
+                // In Favorites, clicking the heart should *remove* the favorite
                 viewModel.removeFromFavorites(game.id)
+                // Provide immediate visual feedback (optional, ViewModel update will follow)
+                // gameAdapter.updateFavoriteStatus(mapOf(game.id to false)) // Could cause flicker if list reloads quickly
                 Toast.makeText(requireContext(), getString(R.string.removed_from_favorites), Toast.LENGTH_SHORT).show()
             }
         )
@@ -72,14 +75,17 @@ class FavoritesFragment : Fragment() {
 
     private fun observeViewModel() {
         viewModel.favoriteGames.observe(viewLifecycleOwner) { games ->
-            // Use the adapter's submitList method for ListAdapter
-            gameAdapter.submitList(games) {
-                // Optional: Scroll to top after list update
-                // binding.recyclerViewFavorites.scrollToPosition(0)
-            }
+            // Submit the list of favorite games to the adapter
+            gameAdapter.submitList(games)
 
-            binding.textViewEmptyFavorites.isVisible = games.isNullOrEmpty()
-            if(games.isNullOrEmpty()) {
+            val favoriteStatusMap = games.associate { it.id to true }
+            // Update the adapter's internal status map
+            gameAdapter.updateFavoriteStatus(favoriteStatusMap)
+
+            // Update visibility based on the list being empty or not
+            val isLoading = viewModel.isLoading.value ?: false
+            binding.textViewEmptyFavorites.isVisible = games.isNullOrEmpty() && !isLoading // Show empty message only if not loading
+            if(games.isNullOrEmpty() && !isLoading) {
                 binding.textViewEmptyFavorites.text = getString(R.string.no_favorites_message)
             }
             binding.recyclerViewFavorites.isVisible = !games.isNullOrEmpty()
@@ -87,13 +93,17 @@ class FavoritesFragment : Fragment() {
 
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             binding.progressBarFavorites.isVisible = isLoading
+            // Adjust visibility based on loading state
             if (isLoading) {
                 binding.recyclerViewFavorites.isVisible = false
                 binding.textViewEmptyFavorites.isVisible = false
             } else {
-                // Ensure RecyclerView is visible when not loading AND list is not empty
-                if (!viewModel.favoriteGames.value.isNullOrEmpty()) {
-                    binding.recyclerViewFavorites.isVisible = true
+                // Re-check list emptiness when loading finishes
+                val games = viewModel.favoriteGames.value
+                binding.recyclerViewFavorites.isVisible = !games.isNullOrEmpty()
+                binding.textViewEmptyFavorites.isVisible = games.isNullOrEmpty()
+                if(games.isNullOrEmpty()) {
+                    binding.textViewEmptyFavorites.text = getString(R.string.no_favorites_message)
                 }
             }
         }
@@ -101,7 +111,7 @@ class FavoritesFragment : Fragment() {
         viewModel.error.observe(viewLifecycleOwner) { errorMessage ->
             errorMessage?.let {
                 Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
-                viewModel.clearError()
+                viewModel.clearError() // Clear error after showing
             }
         }
     }

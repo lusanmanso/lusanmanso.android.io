@@ -20,8 +20,8 @@ class GameDetailViewModel(application: Application) : AndroidViewModel(applicati
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> get() = _isLoading
 
-    private val _gameDetails = MutableLiveData<GameDetail>()
-    val gameDetails: LiveData<GameDetail> get() = _gameDetails
+    private val _gameDetails = MutableLiveData<GameDetail?>()
+    val gameDetails: MutableLiveData<GameDetail?> get() = _gameDetails
 
     private val _error = MutableLiveData<String?>()
     val error: LiveData<String?> get() = _error
@@ -93,7 +93,7 @@ class GameDetailViewModel(application: Application) : AndroidViewModel(applicati
 
         val game = Game(
             id = detail.id,
-            name = detail.name ?: "",
+            name = detail.name,
             backgroundImage = detail.backgroundImage,
             rating = detail.rating,
             released = detail.released,

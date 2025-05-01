@@ -45,6 +45,23 @@ class FavoritesViewModel : ViewModel() {
         }
     }
 
+    fun addFavorite(game: Game) {
+        val currentUser = auth.currentUser ?: run {
+            _error.value = "Login required to add favorite"
+            return
+        }
+        viewModelScope.launch {
+            try {
+                // Asume que el repositorio tiene un método addFavorite que recibe el objeto Game
+                // o los datos necesarios (game.id, game.name, game.background_image, etc.)
+                favoritesRepository.addFavorite(game)
+                loadFavoriteGames() // Actualiza la lista después de añadir
+            } catch (e: Exception) {
+                _error.postValue("Failed to add favorite: ${e.message}")
+            }
+        }
+    }
+
     fun removeFromFavorites(gameId: Int) {
         val currentUser = auth.currentUser ?: run {
             _error.value = "Login required to remove from favorites"

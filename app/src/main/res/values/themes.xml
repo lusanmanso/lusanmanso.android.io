@@ -1,7 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+
+    <!-- Light theme -->
     <style name="Base.Theme.Checkpoint" parent="Theme.Material3.Light.NoActionBar">
-        <!-- Customize your light theme here. -->
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryVariant">@color/primary_variant</item>
         <item name="colorSecondary">@color/secondary</item>
@@ -19,7 +19,7 @@
 
     <style name="Theme.Checkpoint" parent="Base.Theme.Checkpoint" />
 
-    <!-- Style for game cards -->
+    <!-- Style for the game cards -->
     <style name="Widget.App.CardView" parent="Widget.MaterialComponents.CardView">
         <item name="cardBackgroundColor">@color/white</item>
         <item name="cardCornerRadius">8dp</item>
@@ -27,4 +27,13 @@
         <item name="contentPadding">0dp</item>
         <item name="rippleColor">@color/primary_variant</item>
     </style>
+
+    <style name="Theme.Checkpoint.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="Theme.Checkpoint.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="Theme.Checkpoint.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
 </resources>

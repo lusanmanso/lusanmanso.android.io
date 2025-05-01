@@ -1,6 +1,5 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 import java.util.Properties // Import Properties class
-import java.io.FileInputStream // Import FileInputStream class
 
 // Load secrets from secrets.properties into project.extra
 val secrets: Properties = Properties()

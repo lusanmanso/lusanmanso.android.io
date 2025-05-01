@@ -1,21 +1,9 @@
-// Import this from Java cause then getLocalProperty does not work (*Gemini did it)
-import java.util.Properties
-
-fun getLocalProperty(key: String): String {
-    val properties = Properties()
-    val localPropertiesFile = project.rootProject.file("local.properties")
-    if (localPropertiesFile.exists()) {
-        localPropertiesFile.inputStream().use { properties.load(it) }
-    }
-
-    return properties.getProperty(key, "")
-}
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.google.gms.google.services) // Google Services Gradle Plugin
     alias(libs.plugins.androidx.navigation.safeargs)
+    alias(libs.plugins.secrets.gradle.plugin) //
 }
 
 android {
@@ -28,22 +16,21 @@ android {
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
+        vectorDrawables.useSupportLibrary = true
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        val secrets = rootProject.extra["secrets"] as Properties // Cast to Properties
-        // Read API Key from local.properties and expose it in BuildConfig
-        buildConfigField("String", "RAWG_API_KEY", "\"${secrets.getProperty("RAWG_API_KEY")}\"")
     }
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -51,12 +38,17 @@ android {
 
     kotlinOptions {
         jvmTarget = "11"
+        freeCompilerArgs += listOf("-Xexplicit-api=strict")
     }
 
     buildFeatures {
         viewBinding = true
         buildConfig = true
     }
+}
+
+secrets {
+    propertiesFileName = "secrets.properties"
 }
 
 dependencies {
@@ -72,16 +64,14 @@ dependencies {
     implementation(libs.androidx.navigation.ui.ktx)
 
     // Firebase
-    //noinspection BomWithoutPlatform
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
-    // implementation(libs.firebase.auth.ktx) The same for Kotlin (I think is already in .auth)
     implementation(libs.firebase.firestore.ktx)
 
-    //  Retrofit for API requests
-    implementation(libs.retrofit) // Networking
-    implementation(libs.converter.gson) // JSON <-> Kotlin
-    implementation(libs.gson) // Core GSON library
+    // Retrofit for API requests
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    // gson is pulled in by converter; explicit dep removed
 
     // OkHttp for handling HTTP requests
     implementation(libs.okhttp)
@@ -91,17 +81,15 @@ dependencies {
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
 
-    // Architecture Componentes
+    // Architecture Components
     implementation(libs.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.recyclerview)
-    implementation(libs.logging.interceptor)
-    implementation(libs.androidx.swiperefreshlayout) // Or use the latest version
+    implementation(libs.androidx.swiperefreshlayout)
 
     // Glide for the images
     implementation(libs.glide)
-    annotationProcessor(libs.compiler)
-    
+
     // Testing
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

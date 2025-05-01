@@ -1,9 +1,7 @@
 package com.example.checkpoint.ui.detail
 
 import android.content.Intent
-import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
-import android.net.Uri
 import android.os.Bundle
 import android.text.Html
 import android.text.method.LinkMovementMethod
@@ -21,6 +19,7 @@ import com.example.checkpoint.data.models.GameDetail
 import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
 import androidx.core.net.toUri
+import androidx.core.graphics.toColorInt
 
 class GameDetailFragment : Fragment() {
 
@@ -66,7 +65,9 @@ class GameDetailFragment : Fragment() {
         }
 
         viewModel.gameDetails.observe(viewLifecycleOwner) { gameDetail ->
-            updateUI(gameDetail)
+            gameDetail?.let { nonNullGameDetail ->
+                updateUI(nonNullGameDetail)
+            }
         }
 
         // Observe changes in favorite status
@@ -89,16 +90,6 @@ class GameDetailFragment : Fragment() {
                     Snackbar.LENGTH_SHORT
                 ).show()
             }
-        }
-
-        // Button to add to collection
-        binding.fabAddToCollection.setOnClickListener {
-            // Future implementation for adding to collection
-            Snackbar.make(
-                binding.root,
-                getString(R.string.game_added_to_collection),
-                Snackbar.LENGTH_SHORT
-            ).show()
         }
 
         // Button to mark as favorite
@@ -127,7 +118,7 @@ class GameDetailFragment : Fragment() {
 
     private fun updateUI(gameDetail: GameDetail) {
         val notAvailable = getString(R.string.not_available) // Default values for unavailable strings
-        val tba = getString(R.string.tba) //Default value for TBA dates
+        // val tba = getString(R.string.tba) //Default value for TBA dates
 
         with(binding) {
             // Title and basic details
@@ -141,8 +132,8 @@ class GameDetailFragment : Fragment() {
             // Safe check before tinting
             starDrawable?.setTint(when {
                 currentRating >= 4 -> resources.getColor(R.color.rating_star, requireContext().theme) // Green for good scores
-                currentRating >= 2 -> Color.parseColor("#FFC107") // Amber for medium/mild scores
-                else -> Color.parseColor("#F44336")
+                currentRating >= 2 -> "#FFC107".toColorInt() // Amber for medium/mild scores
+                else -> "#F44336".toColorInt()
             })
 
             // Release date
@@ -161,9 +152,9 @@ class GameDetailFragment : Fragment() {
                     // Change colors based on score
                     val background = textViewMetacritic.background as? GradientDrawable
                     background?.setColor(when {
-                        score >= 75 -> Color.parseColor("#6DC849") // Green for good scores
-                        score >= 50 -> Color.parseColor("#FFCC33") // Amber for blabla
-                        else -> Color.parseColor("#FF4136") // Red for bad scores
+                        score >= 75 -> "#6DC849".toColorInt() // Green for good scores
+                        score >= 50 -> "#FFCC33".toColorInt() // Amber for blabla
+                        else -> "#FF4136".toColorInt() // Red for bad scores
                     })
                 } else {
                     textViewMetacritic.isVisible = false
@@ -173,7 +164,7 @@ class GameDetailFragment : Fragment() {
             }
 
             // Description
-            val description = gameDetail.description?.takeIf { it.isNotBlank() } ?: notAvailable
+            val description = gameDetail.description.takeIf { it.isNotBlank() } ?: notAvailable
             textViewGameDescription.text = Html.fromHtml(description, Html.FROM_HTML_MODE_COMPACT)
 
             // Configure links to be clickable

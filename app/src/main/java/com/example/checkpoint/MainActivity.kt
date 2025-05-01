@@ -1,20 +1,25 @@
+// Author: Pair Programmer
+// OS support: Android
+// Description: Main activity hosting the navigation graph and bottom navigation.
 package com.example.checkpoint
 
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.FirebaseApp
-import com.google.firebase.auth.FirebaseAuth
+import android.util.Log // Import Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment // <-- Necesario para obtener el fragmento
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
-import android.view.Menu
-import android.view.MenuItem
 import androidx.core.view.isVisible
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
+// import androidx.navigation.findNavController // Ya no usamos esta importación aquí
+import androidx.navigation.ui.NavigationUI
 import com.example.checkpoint.databinding.ActivityMainBinding
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.FirebaseApp // Mantener si no usas Initializer
+import com.google.firebase.auth.FirebaseAuth
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -25,80 +30,71 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d("MainActivity", "onCreate START") // Log inicio onCreate
 
-        // Initialize Firebase
-        FirebaseApp.initializeApp(this)
+        // FirebaseApp.initializeApp(this) // Comentado si usas Initializer
         auth = FirebaseAuth.getInstance()
 
         binding = ActivityMainBinding.inflate(layoutInflater)
+        Log.d("MainActivity", "Layout inflated")
         setContentView(binding.root)
+        Log.d("MainActivity", "setContentView completed")
 
         setSupportActionBar(binding.toolbar)
-
-        // Customize the top bar
         supportActionBar?.setDisplayShowTitleEnabled(false)
+        Log.d("MainActivity", "Toolbar setup")
 
-        navController = findNavController(R.id.nav_host_fragment_content_main)
+        // --- NavController Retrieval (VOLVEMOS AL MÉTODO ANTERIOR) ---
+        val navHostFragment = supportFragmentManager
+            .findFragmentById(R.id.nav_host_fragment_content_main) as NavHostFragment? // Cast opcional (?)
 
-        // Configure which destinations are considered "top level" (no back button)
+        if (navHostFragment == null) {
+            Log.e("MainActivity", "ERROR: NavHostFragment not found! Check ID in activity_main.xml")
+            // Puedes lanzar una excepción o manejar el error como prefieras si no se encuentra
+            // throw IllegalStateException("NavHostFragment not found!")
+            return // Salir si no se encuentra el fragmento
+        }
+        navController = navHostFragment.navController
+        Log.d("MainActivity", "NavController obtained from NavHostFragment")
+        // --- Fin Modificación ---
+
+        // --- Setup Bottom Navigation ---
+        val bottomNavView: BottomNavigationView = binding.bottomNavView
+        NavigationUI.setupWithNavController(bottomNavView, navController)
+        Log.d("MainActivity", "BottomNav setup")
+
+        // Configuración AppBar
         val topLevelDestinations = setOf(
-            R.id.loginFragment,
-            R.id.homeFragment
+            R.id.loginFragment, R.id.homeFragment, R.id.favoritesFragment, R.id.profileFragment
         )
-
         appBarConfiguration = AppBarConfiguration(topLevelDestinations)
         setupActionBarWithNavController(navController, appBarConfiguration)
+        Log.d("MainActivity", "ActionBar setup")
 
-        // Hide/show FAB depending on the current fragment
+        // Listener cambios destino
         navController.addOnDestinationChangedListener { _, destination, _ ->
             handleDestinationChange(destination)
         }
-
-        binding.fab.setOnClickListener {
-            Snackbar.make(it, "Add this functionality in the next iteration!", Snackbar.LENGTH_LONG)
-                .setAction("Close", null)
-                .setAnchorView(R.id.fab).show()
-        }
+        Log.d("MainActivity", "Destination listener added")
+        Log.d("MainActivity", "onCreate END")
     }
 
+    // handleDestinationChange, signOut, onSupportNavigateUp (SIN CAMBIOS desde la versión anterior)
     private fun handleDestinationChange(destination: NavDestination) {
-        // Only show the FAB on the home screen
-        binding.fab.isVisible = destination.id == R.id.homeFragment
-
-        // Show/hide the toolbar based on the fragment
-        val hideToolbarDestinations = setOf(R.id.splashFragment, R.id.loginFragment, R.id.registerFragment)
-        binding.appBarLayout.isVisible = destination.id !in hideToolbarDestinations
-
-        // Update title in the top bar according to the screen
+        val hideChromeDestinations = setOf(
+            R.id.splashFragment, R.id.loginFragment, R.id.registerFragment
+        )
+        val shouldShowChrome = destination.id !in hideChromeDestinations
+        binding.appBarLayout.isVisible = shouldShowChrome
+        binding.bottomNavView.isVisible = shouldShowChrome
         val title = when (destination.id) {
-            R.id.homeFragment -> "Checkpoint"
-            R.id.gameDetailFragment -> "Details"
+            R.id.homeFragment -> getString(R.string.app_name)
+            R.id.gameDetailFragment -> destination.label
+            R.id.favoritesFragment -> getString(R.string.favorites_title)
+            R.id.profileFragment -> getString(R.string.profile_title)
             else -> ""
         }
         binding.toolbarTitle.text = title
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_main, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_settings -> {
-                Snackbar.make(binding.root, "Settings not implemented yet", Snackbar.LENGTH_SHORT).show()
-                true
-            }
-            R.id.action_logout -> {
-                signOut()
-                true
-            }
-            R.id.action_filter -> {
-                Snackbar.make(binding.root, "Filters not implemented yet", Snackbar.LENGTH_SHORT).show()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
     }
 
     private fun signOut() {
@@ -112,3 +108,4 @@ class MainActivity : AppCompatActivity() {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 }
+// --- End of MainActivity.kt ---
